@@ -39,7 +39,7 @@ app.use(function(err, req, res, next) {
   res.render('error'); // views/error.pug
 });
 
-app.listen(9999,()=>{
-  console.log("http://localhost:9999 expressjs 로 게시판 만들기")
+app.listen(8888,()=>{
+  console.log("http://localhost:8888 expressjs 로 게시판 만들기")
 });
 module.exports = app;

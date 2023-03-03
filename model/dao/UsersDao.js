@@ -1,11 +1,23 @@
 const pool=require("../db/WebAppBoardPool");
 const userDao={
+    findAllSql:"SELECT * FROM users LIMIT ?,?",
     findByPermissionSql:"SELECT * FROM users WHERE permission=? LIMIT ?,?",
     findByIdSql:"SELECT * FROM users WHERE u_id=?",
     updateSql:"UPDATE users SET permission=?,email=?,name=?,phone=?,pw=?,gender=?,birth=?,img_path=?,address=?,detail_address=? WHERE u_id=?",
     updatePermissionSql:"UPDATE users SET permission=? WHERE u_id=?",
     insertSql:"INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address, permission) value (?,?,?,?,?,?,?,?,?,?,?)",
-
+    deleteSql:"DELETE FROM users WHERE u_id=?",
+    fildAll : async function(page=1){
+        let length=5;
+        const [rows,f]=await pool.query(this.findAllSql,[(page-1)*length,length]);
+        return rows;
+    },
+    deleteOne : async function(uId){
+        let del=0;
+        const [result,f]=await pool.execute(this.deleteSql,[uId]);
+        del=result.affectedRows;
+        return del;
+    },
     findByPermission : async function(permission,page=1){
         //화살표 함수를 사용하면 this 가 userDao 를 포함하는 Object 를 바인드함
         let length=5;
@@ -38,8 +50,13 @@ const userDao={
             user.detail_address,
             user.u_id
         ];
-        const [result]=await pool.execute(this.updateSql,values);
-        update=result.affectedRows;
+        try {
+            const [result]=await pool.execute(this.updateSql,values);
+            update=result.affectedRows;
+        }catch (e) {
+            update=-1;
+            console.error(e);
+        }
         return update;
     },
     insertOne : async function(user){
@@ -63,8 +80,8 @@ const userDao={
     }
 }
 async function userDaoTest(){//2시까지 식사하고 오셔요~
-    const users=await userDao.findByPermission("USER",2);
-    console.log(users)
+    //const users=await userDao.findByPermission("USER",2);
+    //console.log(users)
     // let update=await userDao.updatePermissionById("user01","GOLD");
     // console.log(update)
     // const paramUser={
@@ -105,8 +122,14 @@ async function userDaoTest(){//2시까지 식사하고 오셔요~
     // }catch (e) {
     //     console.error(e)
     // }
-    // const user=await userDao.findById("user21");
-    // console.log(user);
+    let del=await userDao.deleteOne("user03");
+    console.log(del);
+
+    const user=await userDao.findById("user03");
+    console.log(user);
+
+
+
 };
 userDaoTest();
 module.exports=userDao;

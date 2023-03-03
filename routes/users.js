@@ -7,10 +7,23 @@ router.get('/list.do', async function(req, res) {
   let page= parseInt(req.query.page) || 1
 
   const users=await userService.list(permission,page);
-  res.render("users/list",{users:users});
+  res.render("users/list",{users:users,params:req.query});
 });
 router.get("/insert.do",(req,res)=>{
   res.render("users/insert");
+});
+router.post("/insert.do",async (req,res)=>{
+  let insert=0;
+  try {
+    insert=await userService.register(req.body);
+  }catch (e) {
+    console.error(e);
+  }
+  if(insert>0){
+    res.redirect("/users/list.do");
+  }else{
+    res.redirect("/users/insert.do");
+  }
 });
 router.get("/:uId/detail.do",async (req, res)=>{
   console.log(req.params.uId);

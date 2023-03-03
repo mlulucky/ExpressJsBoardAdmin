@@ -1,19 +1,21 @@
 extends ../layout
 block content
-    ul
-        li
-            a(href="/users/list.do?permission=USER") 일반
-        li
-            a(href="/users/list.do?permission=SILVER") 실버
-        li
-            a(href="/users/list.do?permission=GOLD") 골드
-        li
-            a(href="/users/list.do?permission=PRIVATE") 비공개
-        li
-            a(href="/users/list.do?permission=ADMIN") 관리자
-
-
     h2.my-4 유저 리스트
+
+    ul.nav.nav-tabs.justify-content-end
+        li.nav-item
+            a.nav-link(href="/users/list.do" class=(params.permission === undefined ? 'active' : '')) 전체
+        li.nav-item
+            a.nav-link(href="/users/list.do?permission=USER" class=(params.permission === 'USER' ? 'active' : '')) 일반
+        li.nav-item
+            a.nav-link(href="/users/list.do?permission=SILVER" class=(params.permission === 'SILVER' ? 'active' : '')) 실버
+        li.nav-item
+            a.nav-link(href="/users/list.do?permission=GOLD" class=(params.permission === 'GOLD' ? 'active' : '')) 골드
+        li.nav-item
+            a.nav-link(href="/users/list.do?permission=PRIVATE" class=(params.permission === 'PRIVATE' ? 'active' : '')) 비공개
+        li.nav-item
+            a.nav-link(href="/users/list.do?permission=ADMIN" class=(params.permission === 'ADMIN' ? 'active' : '')) 관리자
+
     table#userTable.table.table-striped.table-hover
         thead
             tr
@@ -46,15 +48,15 @@ block content
                     td.text-right
                         a.btn.btn-outline-primary.btn-sm(href=`/users/${user.u_id}/detail.do`) 상세
 
-    nav
-        ul
-            li
-                a(href=`?page=1`) 1
-            li
-                a(href=`?page=2`) 2
-            li
-                a(href=`?page=3`) 3
-            li
-                a(href=`?page=4`) 4
-            li
-                a(href=`?page=5`) 5
+    nav.mt-4.flex.justify-content-center
+        ul.pagination
+            li.page-item
+                a.page-link(href=`?page=1`) 1
+            li.page-item
+                a.page-link(href=`?page=2`) 2
+            li.page-item
+                a.page-link(href=`?page=3`) 3
+            li.page-item
+                a.page-link(href=`?page=4`) 4
+            li.page-item
+                a.page-link(href=`?page=5`) 5

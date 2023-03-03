@@ -20,7 +20,7 @@ class UsersService{
         return usersDao.insertOne(user);
     }
     async remove(uId){
-        return usersDao.deleteOne(uId)
+        return usersDao.deleteOne(uId);
     }
 }
 

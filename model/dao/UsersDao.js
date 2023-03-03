@@ -12,12 +12,6 @@ const userDao={
         const [rows,f]=await pool.query(this.findAllSql,[(page-1)*length,length]);
         return rows;
     },
-    deleteOne : async function(uId){
-        let del=0;
-        const [result,f]=await pool.execute(this.deleteSql,[uId]);
-        del=result.affectedRows;
-        return del;
-    },
     findByPermission : async function(permission,page=1){
         //화살표 함수를 사용하면 this 가 userDao 를 포함하는 Object 를 바인드함
         let length=5;
@@ -34,6 +28,16 @@ const userDao={
         const [result]=await pool.execute(this.updatePermissionSql,[permission,uId]);
         update=result.affectedRows;
         return update;
+    },
+    deleteOne : async function(uId){
+        let del=0;
+        try {
+            const [result,f]=await pool.execute(this.deleteSql,[uId]);
+            del=result.affectedRows;
+        }catch (e) {
+            throw new Error(e); //예외 위임
+        }
+        return del;
     },
     updateById : async function(user){
         let update=0;
@@ -54,8 +58,7 @@ const userDao={
             const [result]=await pool.execute(this.updateSql,values);
             update=result.affectedRows;
         }catch (e) {
-            update=-1;
-            console.error(e);
+            throw new Error(e); //예외 위임
         }
         return update;
     },
@@ -74,8 +77,12 @@ const userDao={
             user.detail_address,
             user.permission
         ];
-        const [result]=await pool.execute(this.insertSql,values);
-        insert=result.affectedRows;
+        try {
+            const [result]=await pool.execute(this.insertSql,values);
+            insert=result.affectedRows;
+        }catch (e) {
+            throw new Error(e);
+        }
         return insert;
     }
 }
@@ -122,13 +129,11 @@ async function userDaoTest(){//2시까지 식사하고 오셔요~
     // }catch (e) {
     //     console.error(e)
     // }
-    let del=await userDao.deleteOne("user03");
-    console.log(del);
-
-    const user=await userDao.findById("user03");
-    console.log(user);
-
-
+    // let del=await userDao.deleteOne("user03");
+    // console.log(del);
+    //
+    // const user=await userDao.findById("user03");
+    // console.log(user);
 
 };
 userDaoTest();

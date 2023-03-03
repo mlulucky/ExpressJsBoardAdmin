@@ -39,8 +39,8 @@ block content
                     td #{user.name}
                     //td #{user.phone}
                     //td #{user.email}
-                    td #{user.post_time.toLocaleDateString("ko")}
-                    td #{user.birth.toLocaleDateString("ko")}
+                    td #{ user.post_time ? user.post_time.toLocaleDateString("ko") : ""}
+                    td #{ user.birth ? user.birth.toLocaleDateString("ko") : ""}
                     td #{user.gender}
                     td #{user.address}
                     //td #{user.detail_address}
@@ -50,13 +50,13 @@ block content
 
     nav.mt-4.flex.justify-content-center
         ul.pagination
-            li.page-item
-                a.page-link(href=`?page=1`) 1
-            li.page-item
-                a.page-link(href=`?page=2`) 2
-            li.page-item
-                a.page-link(href=`?page=3`) 3
-            li.page-item
-                a.page-link(href=`?page=4`) 4
-            li.page-item
-                a.page-link(href=`?page=5`) 5
+            li.page-item(class=(page===1) && "active")
+                a.page-link(href=`?${query}page=1`) 1
+            li.page-item(class=(page===2) && "active")
+                a.page-link(href=`?${query}page=2`) 2
+            li.page-item(class=(page===3) && "active")
+                a.page-link(href=`?${query}page=3`) 3
+            li.page-item(class=(page===4) && "active")
+                a.page-link(href=`?${query}page=4`) 4
+            li.page-item(class=(page===5) && "active")
+                a.page-link(href=`?${query}page=5`) 5

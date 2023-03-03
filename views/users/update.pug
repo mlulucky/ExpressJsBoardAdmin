@@ -21,14 +21,7 @@ block content
             input#email.form-control(value=user.email, name='email', type='email' placeholder="??")
             label(for='email') 이메일
         div.form-floating.mb-3
-            -let birthStr="";
-            -if(user.birth)
-                -let y = user.birth.getUTCFullYear();
-                -let m = user.birth.getUTCMonth()+1;
-                -m = (m < 10) ? "0"+m : m;
-                -let d = user.birth.getUTCDate();
-                -d = (d < 10) ? "0"+d : d;
-                -birthStr=`${y}-${m}-${d}`;
+            -let birthStr = user.birth ? user.birth.toISOString().slice(0, 10) : '';
             input#birth.form-control(value=birthStr, name='birth', type='date' placeholder="??")
             label(for='birth') 생년월일
         div.form-floating.mb-3

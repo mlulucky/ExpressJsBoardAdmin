@@ -16,6 +16,7 @@ router.get('/list.do', async function(req, res) {
   const users=await userService.list(permission,page);
   res.render("users/list",{users:users,params:req.query,query:query,page:page});
 });
+
 router.get("/insert.do",(req,res)=>{
   res.render("users/insert");
 });

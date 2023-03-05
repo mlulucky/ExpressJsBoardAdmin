@@ -1,6 +1,12 @@
 const boardsDao = require("../dao/BoardsDao");
 class BoardsService{
-
+    list(status){
+        if(status) {
+            return boardsDao.findByStatus(status);
+        }else {
+            return boardsDao.findAll();
+        }
+    }
 
 
 

@@ -6,6 +6,7 @@ const logger = require('morgan'); //서비스(웹앱)를 배포하면 유지보�
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const boardsRouter = require('./routes/boards');
 
 const app = express();
 //17분까지 쉬었다가 오세요~~
@@ -22,8 +23,11 @@ app.use(express.static(path.join(__dirname, 'public'))); //정적리소스 위�
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/boards',boardsRouter);
 
-// catch 404 and forward to error handler
+
+// catch 404
+// and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });

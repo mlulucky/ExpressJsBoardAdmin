@@ -3,7 +3,7 @@ block content
     h2.my-4 게시판 등록 양식
     form#addBoardForm(method='post' action='/boards/insert.do')
         div.form-floating.mb-3
-            input#u_id.form-control(name='u_id' type='text' placeholder="??")
+            input#u_id.form-control(value=loginUser.u_id, readonly=true, name='u_id', type='text', placeholder="??")
             label(for='u_id') 아이디
             p#uidMsg
         div.form-floating.mb-3

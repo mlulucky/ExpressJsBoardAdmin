@@ -43,4 +43,8 @@ nav.navbar.navbar-expand-lg.bg-danger-subtle
                 li.nav-item
                     a.nav-link(href="/hashCodes/list.do") 해시코드리스트
             div#loginCont
-                a.btn.btn-outline-secondary(href="/users/login.do") 로그인
+                if(!loginUser)
+                    a.btn.btn-outline-secondary(href="/users/login.do") 로그인
+                else
+                    a.text-secondary.me-2(href=`/users/${loginUser.u_id}/detail.do`)=`(${loginUser.u_id}) ${loginUser.name}`
+                    a.text-secondary(href="/users/logout.do") 로그아웃

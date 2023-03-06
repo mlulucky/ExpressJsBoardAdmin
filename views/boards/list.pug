@@ -34,22 +34,22 @@ block content
                 // 댓글 수  🧨
                 th.text-right 동작
         tbody
-            each user in users
+            each board in boards
                 tr
-                    td #{user.u_id}
+                    td #{board.b_id}
                     //td #{user.pw}
-                    td #{user.name}
+                    td #{board.u_id}
                     //td #{user.phone}
                     //td #{user.email}
-                    td #{ user.post_time ? user.post_time.toLocaleDateString("ko") : ""}
-                    td #{ user.birth ? user.birth.toLocaleDateString("ko") : ""}
-                    td #{user.gender}
-                    td #{user.address}
+                    td #{board.post_time ? board.post_time.toLocaleDateString("ko") : ""}
+                    td #{board.update_time ? board.update_time.toLocaleDateString("ko") : ""}
+                    td #{board.status}
+                    td #{board.title}
                     //td #{user.detail_address}
-                    td #{user.permission}
-                    td #{user.permission}
+                    td #{board.content}
+                    td #{board.view_count}
                     td.text-right
-                        a.btn.btn-outline-primary.btn-sm(href=`/users/${user.u_id}/detail.do`) 상세
+                        a.btn.btn-outline-primary.btn-sm(href=`/boards/${board.b_id}/detail.do`) 상세
 
     nav.mt-4.flex.justify-content-center
         ul.pagination

@@ -55,7 +55,7 @@ router.get("/:uId/delete.do", async (req, res)=>{
     res.redirect(`/users/${req.params.uId}/detail.do`);
   }
 });
-router.post("/update.do",(req, res)=>{
+router.post("/update.do",async (req, res)=>{
   for(let key in req.body){
     if(!req.body[key].trim()){//""," "
       req.body[key]=null;
@@ -63,7 +63,7 @@ router.post("/update.do",(req, res)=>{
   }
   //console.log(req.body);//==users
   let update=0;
-  update=userService.modify(req.body);
+  update=await userService.modify(req.body);
   if(update>0){
     res.redirect("/users/list.do");
   }else{

@@ -1,7 +1,6 @@
 extends ../layout
 block content
     h2.my-4 게시판 등록 양식
-    script(src="/js/board/insert.js",defer=true)
     form#addBoardForm(method='post' action='/boards/insert.do')
         div.form-floating.mb-3
             input#u_id.form-control(name='u_id' type='text' placeholder="??")
@@ -13,9 +12,6 @@ block content
         div.form-floating.mb-3
             input#content.form-control(name='content', type='text' placeholder="??")
             label(for='content') 내용
-        //div.form-floating.mb-3
-        //    input#imgPath.form-control(name='img_path', type='text' placeholder="??")
-        //    label(for='imgPath') 이미지경로
         div.form-floating.mb-3
             select#status.form-control(name='status' placeholder="??")
                 option(value='PUBLIC', selected=true) 공개

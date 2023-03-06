@@ -3,6 +3,10 @@ block content
     h2.my-4 게시글 수정 양식 ( 상세 페이지 )
     form#addUserForm(method='post' action='/boards/update.do')
         div.form-floating.mb-3
+            input#b_id.form-control(value=board.b_id, readonly=true name='b_id', type='text' placeholder="??")
+            label(for='b_id') num
+
+        div.form-floating.mb-3
             input#u_id.form-control(value=board.u_id, readonly=true name='u_id', type='text' placeholder="??")
             label(for='u_id') 아이디
         div.form-floating.mb-3

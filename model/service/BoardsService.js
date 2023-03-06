@@ -20,8 +20,8 @@ class BoardsService{
         return boardsDao.deleteOne(bId);
     }
 
-    async check(uId){
-        return boardsDao.uidCheck(uId);
+    async searchUidList(uId){
+        return boardsDao.findByUid(uId);
     }
 
 }

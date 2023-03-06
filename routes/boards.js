@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const pool=require("../model/db/WebAppBoardPool")
 const boardService=require("../model/service/BoardsService");
 
 router.get('/list.do', async (req,res)=>{
@@ -74,28 +73,6 @@ router.get("/:bId/delete.do", async (req,res)=>{
         res.redirect(`/boards/${req.params.bId}/detail.do`);
     }
 });
-
-router.get("/uidCheck.do", async (req,res)=>{
-    // let check=0;
-   let uid=req.query.u_id;
-   const resObj={check:false, board:null};
-   try{
-       const board=await boardService.check(uid);
-       if(board){
-           resObj.check=true;
-           resObj.board=board;
-       }
-   }catch(e){
-       console.error(e);
-       return;
-   }
-    res.send(resObj);
-
-});
-
-
-
-
 
 
 module.exports=router;

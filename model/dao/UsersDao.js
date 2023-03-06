@@ -1,5 +1,6 @@
 const pool=require("../db/WebAppBoardPool");
 const userDao={
+    findByUidAndPwSql : "SELECT * FROM users WHERE u_id=? AND pw=? AND permission='ADMIN'",
     findAllSql:"SELECT * FROM users LIMIT ?,?",
     findByPermissionSql:"SELECT * FROM users WHERE permission=? LIMIT ?,?",
     findByIdSql:"SELECT * FROM users WHERE u_id=?",
@@ -7,6 +8,10 @@ const userDao={
     updatePermissionSql:"UPDATE users SET permission=? WHERE u_id=?",
     insertSql:"INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address, permission) value (?,?,?,?,?,?,?,?,?,?,?)",
     deleteSql:"DELETE FROM users WHERE u_id=?",
+    findByUidAndPw : async function(uId,pw){
+        const [rows,f]=await pool.query(this.findByUidAndPwSql,[uId,pw]);
+        return rows[0] || null;
+    },
     fildAll : async function(page=1){
         let length=5;
         const [rows,f]=await pool.query(this.findAllSql,[(page-1)*length,length]);
@@ -86,55 +91,4 @@ const userDao={
         return insert;
     }
 }
-async function userDaoTest(){//2시까지 식사하고 오셔요~
-    //const users=await userDao.findByPermission("USER",2);
-    //console.log(users)
-    // let update=await userDao.updatePermissionById("user01","GOLD");
-    // console.log(update)
-    // const paramUser={
-    //     u_id: 'user01',
-    //     pw: 'mysql1234',
-    //     name: '이윤식',
-    //     phone: '01043215678',
-    //     img_path: '/img/users/user01.jpeg',
-    //     email: 'user01@naver.com',
-    //     birth: '1994-01-14',
-    //     gender: 'MALE',
-    //     address: '경기도 안양시',
-    //     detail_address: '안양로 88',
-    //     permission: 'PRIVATE'
-    // };
-    // try {
-    //     const allUpdate=await userDao.updateById(paramUser);
-    //     console.log(allUpdate);
-    // }catch (e) {
-    //     console.error(e)
-    // }
-    // const paramUser2={
-    //     u_id: 'user21',
-    //     pw: 'mysql1234',
-    //     name: '이현주',
-    //     phone: '01033335678',
-    //     img_path: '/img/users/user21.jpeg',
-    //     email: 'user21@daum.net',
-    //     birth: '2005-01-14',
-    //     gender: 'FEMALE',
-    //     address: '서울시',
-    //     detail_address: '압구정로 88',
-    //     permission: 'GOLD'
-    // };
-    // try {
-    //     let insert =await userDao.insertOne(paramUser2);
-    //     console.log(insert)
-    // }catch (e) {
-    //     console.error(e)
-    // }
-    // let del=await userDao.deleteOne("user03");
-    // console.log(del);
-    //
-    // const user=await userDao.findById("user03");
-    // console.log(user);
-
-};
-userDaoTest();
 module.exports=userDao;

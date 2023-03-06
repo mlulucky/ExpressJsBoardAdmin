@@ -1,0 +1,15 @@
+extends ../layout
+block content
+    h2.my-4 관리자(ADMIN) 로그인 양식
+    p 로그인 : id 와 pw 가 동일한 유저가 있다면 서버에 user 정보를 저장해서 유지 시킴으로서(session) 접속하고 있는 것 처럼 서비스를 제공하는 것
+    p http 통신은 연결이 없는 통신(<->소켓,전화)으로 접속을 유지한다는 것이 불가능하기 때문에 서버에 user 정보를 저장해서 마치 접속하고 있는 것 처럼 만든다.
+    form#addUserForm(method='post' action='/users/login.do')
+        div.form-floating.mb-3
+            input#u_id.form-control(name='u_id', type='text' placeholder="??")
+            label(for='u_id') 아이디
+        div.form-floating.mb-3
+            input#pw.form-control(name='pw', type='password' placeholder="??")
+            label(for='pw') 비밀번호
+        div.text-end.mb-5
+            button#resetUserBtn.btn.btn-outline-warning.me-3(type='reset') 초기화
+            button#addUserBtn.btn.btn-outline-primary(type='submit') 로그인

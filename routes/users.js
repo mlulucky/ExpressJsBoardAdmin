@@ -2,6 +2,13 @@ const express = require('express');
 const router = express.Router();
 const userService=require("../model/service/UsersService");
 
+router.get("/login.do",(req, res)=>{
+  res.render("users/login");
+})
+
+
+
+
 router.get('/list.do', async function(req, res) {
   let permission=req.query.permission;
   let page = parseInt(req.query.page) || 1;

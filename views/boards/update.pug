@@ -2,6 +2,12 @@ extends ../layout
 block content
     h2.my-4 게시글 수정 양식 ( 상세 페이지 )
     form#addUserForm(method='post' action='/boards/update.do')
+        //m(t,b,s,e) my (top,bottom) mx (left,right) ms(left) me(right) mt,mb
+        div.mb-3
+            span.btn.btn-outline-primary.btn-sm.rounded-5.me-2=`좋아요 ${board.likes}`
+            span.btn.btn-outline-danger.btn-sm.rounded-5.me-2=`싫어요 ${board.bads}`
+            span.btn.btn-outline-warning.btn-sm.rounded-5.me-2=`슬퍼요 ${board.sads}`
+            span.btn.btn-outline-success.btn-sm.rounded-5.me-2=`최고야 ${board.bests}`
         div.form-floating.mb-3
             input#b_id.form-control(value=board.b_id, readonly=true name='b_id', type='text' placeholder="??")
             label(for='b_id') num

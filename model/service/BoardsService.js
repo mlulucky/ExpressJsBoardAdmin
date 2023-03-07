@@ -17,6 +17,10 @@ class BoardsService{
         const board=await boardsDao.findById(bId);
         const imgs=await boardImsDao.findByBId(bId);
         board.imgs=imgs;
+        //boards : board_likes = 1 : N
+        //board_likes 의 그룹핑된 수
+        //4시까지 쉬었다가 오세요~
+        //로그인한 관리자가 좋아요 싫어요 등록할 수 있도록 구현해보세요~~
         return board;
     }
     async modify(board){

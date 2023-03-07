@@ -20,12 +20,22 @@ class BoardsService{
         return board;
     }
     async modify(board){
-        return boardsDao.updateById(board);
+        let del=await boardsDao.updateById(board);
+        //board.bi_id=>[] or ["12", "15", "16"]
+        //board.bi_id=>undefined, "122"  , ["12", "315"]
+        if(board.bi_id && Array.isArray(board.bi_id)){
+            for (let biId of board.bi_id){
+                del+=await boardImsDao.deleteById(biId);
+            }
+        }else if(board.bi_id){
+            del+=await boardImsDao.deleteById(board.bi_id);
+        }
+        return del;
     }
     async remove(bId){
-        return boardsDao.deleteOne(bId);
+        let del=await boardsDao.deleteOne(bId);
+        return del;
     }
-
     async searchUidList(uId){
         return boardsDao.findByUid(uId);
     }

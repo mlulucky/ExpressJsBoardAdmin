@@ -2,6 +2,7 @@ const pool=require("../db/WebAppBoardPool");
 const boardDao={
 
     findAllSql: "SELECT * FROM boards LIMIT ?,?",
+    //findByIdSql: "SELECT * FROM boards WHERE b_id=?",
     findByIdSql: "SELECT * FROM boards WHERE b_id=?",
     //findByIdSql: "SELECT * FROM boards LEFT JOIN board_imgs USING(b_id) WHERE b_id=?",
     findByUidSql: "SELECT * FROM boards WHERE u_id=?",

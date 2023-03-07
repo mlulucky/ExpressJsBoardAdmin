@@ -3,6 +3,7 @@ const boardDao={
 
     findAllSql: "SELECT * FROM boards LIMIT ?,?",
     findByIdSql: "SELECT * FROM boards WHERE b_id=?",
+    //findByIdSql: "SELECT * FROM boards LEFT JOIN board_imgs USING(b_id) WHERE b_id=?",
     findByUidSql: "SELECT * FROM boards WHERE u_id=?",
     findByStatusSql: "SELECT * FROM boards WHERE status=? LIMIT ?,?",
     updateSql: "UPDATE boards SET title=?, content=?, status=? WHERE b_id=?",
@@ -15,7 +16,7 @@ const boardDao={
         return rows;
     },
     findById : async function(bId){
-       const [rows,f]=await pool.query(this.findByIdSql,[bId]);
+        const [rows,f]=await pool.query(this.findByIdSql,[bId]);
         return rows[0] || null;
     },
 

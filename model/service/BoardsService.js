@@ -1,4 +1,6 @@
 const boardsDao = require("../dao/BoardsDao");
+const boardImsDao = require("../dao/BoardImgsDao");
+
 class BoardsService{
     async list(status,page=1){
         if(status) {
@@ -11,7 +13,11 @@ class BoardsService{
         return boardsDao.insertOne(board);
     }
     async detail(bId){
-        return boardsDao.findById(bId);
+        //boards : board_imgs = 1 : N
+        const board=await boardsDao.findById(bId);
+        const imgs=await boardImsDao.findByBId(bId);
+        board.imgs=imgs;
+        return board;
     }
     async modify(board){
         return boardsDao.updateById(board);

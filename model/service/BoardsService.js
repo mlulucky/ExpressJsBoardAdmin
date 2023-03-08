@@ -1,7 +1,9 @@
 const pool=require("../db/WebAppBoardPool");
-const BoardsDao = require("../dao/BoardsDao"); //db.conn
-const BoardImsDao = require("../dao/BoardImgsDao");//db.conn
+const BoardsDao = require("../dao/BoardsDao");
+const BoardImsDao = require("../dao/BoardImgsDao");
+const BoardLikesDao=require("../dao/BoardLikesDao");
 const boardImsDao = new BoardImsDao(pool);
+const boardLikesDao=new BoardLikesDao(pool);
 const boardsDao=new BoardsDao(pool);
 //서버튜닝 : 기능개선없이 성능을 올리는 것
 
@@ -17,14 +19,14 @@ class BoardsService{
         return boardsDao.insertOne(board);
     }
     async detail(bId){
-        //boards : board_imgs = 1 : N
         const board=await boardsDao.findById(bId);
         const imgs=await boardImsDao.findByBId(bId);
+        const bls=await boardLikesDao.groupByStatusFindByBid(bId);
         board.imgs=imgs;
+        board.bls=bls;
+        //boards : board_imgs = 1 : N
         //boards : board_likes = 1 : N
-        //board_likes 의 그룹핑된 수
-        //4시까지 쉬었다가 오세요~
-        //로그인한 관리자가 좋아요 싫어요 등록할 수 있도록 구현해보세요~~
+        //board_likes 의 그룹핑된 수 2시까지 식사하세요~
         return board;
     }
     async modify(board){

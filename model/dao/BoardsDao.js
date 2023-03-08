@@ -1,9 +1,8 @@
-const pool=require("../db/WebAppBoardPool");
-const boardDao={
-
-    findAllSql: "SELECT * FROM boards LIMIT ?,?",
-    findByIdSql: "SELECT * FROM boards WHERE b_id=?",
-    // findByIdSql:
+//const pool=require("../db/WebAppBoardPool");
+class BoardsDao{
+    #findAllSql="SELECT * FROM boards LIMIT ?,?";
+    #findByIdSql="SELECT * FROM boards WHERE b_id=?";
+    // findByIdSql=
     //     `SELECT *,
     //        (SELECT COUNT(*)
     //             FROM board_likes l
@@ -18,36 +17,39 @@ const boardDao={
     //             FROM board_likes l
     //             WHERE l.b_id=b.b_id AND status='BEST') bests
     //         FROM boards b WHERE b_id=?`,
-    //findByIdSql: "SELECT * FROM boards LEFT JOIN board_imgs USING(b_id) WHERE b_id=?",
-    findByUidSql: "SELECT * FROM boards WHERE u_id=?",
-    findByStatusSql: "SELECT * FROM boards WHERE status=? LIMIT ?,?",
-    updateSql: "UPDATE boards SET title=?, content=?, status=? WHERE b_id=?",
-    insertSql: "INSERT INTO boards (u_id,title,content ,status) value (?,?,?,?)",
-    deleteSql: "DELETE FROM boards WHERE b_id=?",
-
-    findAll : async function(page=1){
+    //findByIdSql: "SELECT * FROM boards LEFT JOIN board_imgs USING(b_id) WHERE b_id=?";
+    #findByUidSql= "SELECT * FROM boards WHERE u_id=?";
+    #findByStatusSql= "SELECT * FROM boards WHERE status=? LIMIT ?,?";
+    #updateSql= "UPDATE boards SET title=?, content=?, status=? WHERE b_id=?";
+    #insertSql= "INSERT INTO boards (u_id,title,content ,status) value (?,?,?,?)";
+    #deleteSql= "DELETE FROM boards WHERE b_id=?";
+    #pool;
+    constructor(pool) {
+        this.#pool=pool;
+    }
+    async findAll (page=1){
         let length=5;
-        const[rows,f]=await pool.query(this.findAllSql,[(page-1)*length, length]);
+        const[rows,f]=await this.#pool.query(this.#findAllSql,[(page-1)*length, length]);
         return rows;
-    },
-    findById : async function(bId){
-        const [rows,f]=await pool.query(this.findByIdSql,[bId]);
+    };
+    async  findById (bId){
+        const [rows,f]=await this.#pool.query(this.#findByIdSql,[bId]);
         return rows[0] || null;
-    },
+    };
 
-    findByUid : async function(uId){
-        const [rows,f]=await pool.query(this.findByUidSql,[uId]);
+    async findByUid (uId){
+        const [rows,f]=await this.#pool.query(this.#findByUidSql,[uId]);
         return rows[0] || null;
-    },
+    };
 
-    findByStatus : async function(status,page=1) {
+    async findByStatus (status,page=1) {
       let length=5;
       const values=[status, (page-1)*length,length]
-      const [rows,f]= await pool.query(this.findByStatusSql,values);
+      const [rows,f]= await this.#pool.query(this.#findByStatusSql,values);
       return rows;
-    },
+    };
 
-    updateById : async function(board) {
+    async updateById (board) {
         let update=0;
         const values=[
             board.title,
@@ -57,15 +59,15 @@ const boardDao={
 
         ];
         try{
-            const [result]=await pool.execute(this.updateSql, values);
+            const [result]=await this.#pool.execute(this.#updateSql, values);
             update=result.affectedRows;
         }catch (e) {
-            throw new Error(e); // ???? 🧨예외위임?
+            throw new Error(e);
         }
         return update;
-    },
+    };
 
-    insertOne : async function(board) {
+    async insertOne (board) {
         let insert=0;
         const values=[
             board.u_id,
@@ -74,23 +76,22 @@ const boardDao={
             board.status
         ];
         try{
-            const [result]=await pool.execute(this.insertSql,values);
+            const [result]=await this.#pool.execute(this.#insertSql,values);
             insert=result.affectedRows;
         }catch (e) {
             throw new Error(e);
         }
         return insert;
-    },
-    deleteOne : async function(bId){
+    };
+     async deleteOne (bId){
         let del=0;
         try{
-            const [result, f]=await pool.execute(this.deleteSql,[bId]);
+            const [result, f]=await this.#pool.execute(this.#deleteSql,[bId]);
             del=result.affectedRows;
         }catch(e){
             throw new Error(e);
         }
         return del;
     }
-
 }
-module.exports=boardDao;
+module.exports=BoardsDao;

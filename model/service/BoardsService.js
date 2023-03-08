@@ -1,5 +1,9 @@
-const boardsDao = require("../dao/BoardsDao");
-const boardImsDao = require("../dao/BoardImgsDao");
+const pool=require("../db/WebAppBoardPool");
+const BoardsDao = require("../dao/BoardsDao"); //db.conn
+const BoardImsDao = require("../dao/BoardImgsDao");//db.conn
+const boardImsDao = new BoardImsDao(pool);
+const boardsDao=new BoardsDao(pool);
+//서버튜닝 : 기능개선없이 성능을 올리는 것
 
 class BoardsService{
     async list(status,page=1){

@@ -1,4 +1,6 @@
-const usersDao=require("../dao/UsersDao");
+const pool=require("../db/WebAppBoardPool");
+const UsersDao=require("../dao/UsersDao");
+const usersDao=new UsersDao(pool);
 class UsersService{
     async list(permission,page=1){
         if(permission){

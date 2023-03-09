@@ -3,10 +3,12 @@ block content
     h2.my-4 게시글 수정 양식 ( 상세 페이지 )
     form#addUserForm(method='post' action='/boards/update.do')
         //board.bis=[{ cnt: 4, status: 'LIKE' },{ cnt: 2, status: 'SAD' },{ cnt: 3, status: 'BEST' },{ cnt: 1, status: 'BAD' }]
-        -const bisObj={LIKE: {text: "좋아요", className:"btn-outline-primary"},BAD: {text: "싫어요", className: "btn-outline-danger"},SAD: {text: "슬퍼요", className: "btn-outline-warning"},BEST: {text: "최고야", className: "btn-outline-success"}}
+        -const bisObj={LIKE: {text: "좋아요", className:"btn-outline-primary",cnt:0},BAD: {text: "싫어요", className: "btn-outline-danger",cnt:0},SAD: {text: "슬퍼요", className: "btn-outline-warning",cnt:0},BEST: {text: "최고야", className: "btn-outline-success",cnt:0}}
+        -for (const bl of board.bls)
+            -bisObj[bl.status].cnt=bl.cnt
         div.mb-3
-            -for (const bl of board.bls)
-                span.btn.btn-sm.rounded-5.me-2(class=bisObj[bl.status].className)=`${ bisObj[bl.status].text } ${bl.cnt}`
+            -for (const key in bisObj)
+                span.btn.btn-sm.rounded-5.me-2(class=bisObj[key].className)=`${ bisObj[key].text } ${bisObj[key].cnt}`
         div.form-floating.mb-3
             input#b_id.form-control(value=board.b_id, readonly=true name='b_id', type='text' placeholder="??")
             label(for='b_id') num

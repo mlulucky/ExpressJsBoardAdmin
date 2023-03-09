@@ -37,10 +37,11 @@ router.post("/insert.do",upload.single("img_path"),async (req, res)=>{
     //const imgPathFile=req.file;
     //console.log(imgPathFile);
     const reply=req.body;//post 방식으로 보내는 파라미터
-    if(!req.body.parent_br_id){ //"" or undefined
-        req.body.parent_br_id=null;
-    }
+    if(!req.body.parent_br_id)req.body.parent_br_id=null; //참조할 부모 댓글이 없을 때
+    if(!req.body.img_path)req.body.img_path=null; //이미지 없을 때
     req.body.b_id=Number(req.body.b_id);
+
+
     let insertId=0;
     try {
         insertId=await boardRepliesService.register(reply)

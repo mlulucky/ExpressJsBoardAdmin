@@ -28,9 +28,19 @@ class BoardsService{
         board.imgs=imgs;
         board.bls=bls;
         board.replies=replies;
+        //대댓글 !!
+        if(board.replies && Array.isArray(board.replies)){
+            for(let i=0; i<board.replies.length; i++){
+                let br_id=board.replies[i].br_id;
+                const replies=await boardRepliesDao.findByParentBrId(br_id);
+                board.replies[i].replies=replies;
+            }
+        }
+
         //boards : board_imgs = 1 : N
         //boards : board_likes = 1 : N
         //boards : board_replies = 1 :N
+        //board_replies (댓글): board_replies (대댓글) = 1: N (Self join)
         return board;
     }
     async modify(board){

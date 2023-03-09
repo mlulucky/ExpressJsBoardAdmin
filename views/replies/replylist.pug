@@ -1,0 +1,31 @@
+ul(style="list-style:none")
+    -for (const rr of r.replies)
+        li
+            div.card
+                div.row.g-0
+                    div.col-md-3
+                        img.img-fluid.rounded(src=rr.img_path)
+                    div.col-md-9
+                        div.card-body
+                            p.card-text
+                                small.pe-3=`댓글번호 : ${rr.br_id}`
+                                small.px-3=`글쓴이 : ${rr.u_id}`
+                                small.px-3=`댓글상태 : ${rr.status}`
+                            p.card-text.d-flex
+                                small.pe-3.text-muted=`작성일 : ${rr.post_time.toLocaleString("ko-KR")}`
+                                small.text-muted=`수정일 : ${rr.update_time.toLocaleString("ko-KR")}`
+                            p.card-text=rr.content
+                    ul.nav.nav-tabs
+                        li.nav-item
+                            a.nav-link(href=`#replyModify${rr.br_id}`, role="button", data-bs-toggle="collapse") 수정
+                        li.nav-item
+                            a.nav-link(href=`#replyReply${rr.br_id}`, role="button", data-bs-toggle="collapse") 대댓글작성
+                        li.nav-item
+                            a.nav-link 삭제
+                    div.collapse(id=`replyModify${rr.br_id}`)
+                        form
+                            p
+                                textarea=rr.content
+                    div.collapse(id=`replyReply${rr.br_id}`)
+                        //include replyReplyInsert
+//4시 15분까지 쉬고~ 나머지 자습입니다~ 대대댓글 해보세요~

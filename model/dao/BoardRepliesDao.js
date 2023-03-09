@@ -9,7 +9,10 @@
 class BoardRepliesDao{
     #findAllSql="SELECT * FROM board_replies ORDER BY post_time DESC LIMIT ?,?";
     #findByStatusSql="SELECT * FROM board_replies WHERE status=? ORDER BY post_time DESC LIMIT ?,?"; //PRIVATE(y),PUBLIC,REPORT(r),BLOCK(b)
-    #findByBidSql="SELECT * FROM board_replies WHERE b_id=? ORDER BY post_time DESC LIMIT ?,?"; //보드에 작성된 댓글(유저에게는 status="PUBLIC",로그인한 유저는 PRIVATE 까지 보여야함)
+    #findByBidSql="SELECT * FROM board_replies WHERE b_id=? AND parent_br_id IS NULL ORDER BY post_time DESC LIMIT ?,?"; //보드에 작성된 댓글(유저에게는 status="PUBLIC",로그인한 유저는 PRIVATE 까지 보여야함)
+
+    #findByParentBrIdSql="SELECT * FROM board_replies WHERE parent_br_id=? ORDER BY post_time";
+    //댓글 달린 댓글 리스트 조회!
     #insertOneSql="INSERT INTO board_replies (b_id, u_id, parent_br_id, img_path, content, status) VALUE (?,?,?,?,?,?)";
     #updateByIdSql="UPDATE board_replies SET img_path=?,content=?,status=? WHERE br_id=?";
     #updateStatusByIdSql="UPDATE board_replies SET status=? WHERE br_id=?";
@@ -31,6 +34,12 @@ class BoardRepliesDao{
         const [rows,f]=await this.#pool.query(this.#findByBidSql,[bId,(page-1)*this.#pageLength,this.#pageLength]);
         return rows;
     }
+    async findByParentBrId(brId,page=1){
+        //댓글(br_id)을 참조하는 댓글(대댓글) 리스트 조회
+        const [rows,f]=await this.#pool.query(this.#findByParentBrIdSql,[brId]);
+        return rows;
+    }
+
     async insertOne(reply){
     /*reply= {
             b_id: 7,

@@ -32,6 +32,11 @@ describe("BoardRepliesDao test",()=>{
         const rows=await boardRepliesDao.findByBid(7,1);
         console.log(rows);
     });
+    test("findByParentBrId",async ()=>{
+        const rows=await boardRepliesDao.findByParentBrId(46);
+        console.log(rows);
+    });
+
     test("insert",async ()=>{
         const reply= {
            b_id: 6,

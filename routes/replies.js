@@ -1,5 +1,7 @@
 const express=require("express");
 const router=express.Router();
+const BoardRepliesService=require("../model/service/BoardRepliesService");
+const boardRepliesService=new BoardRepliesService();
 const path=require("path");
 const multer=require("multer");
 const storage=multer.diskStorage(
@@ -23,21 +25,30 @@ const storage=multer.diskStorage(
             let ext=path.extname(file.originalname);
             let name="reply_"+Date.now()+"_"+(Math.trunc(Math.random()*1000))+ext; //.jpeg
             //0.123012937901273809*1E9 => 12301293.7901273809 => 12301294
+            req.body.img_path="/img/reply/"+name;
             cb(null,name);
         }
     }
 );
-const upload=multer({storage:storage})
-//2까지 식사하고 오세요~
-
+const upload=multer({storage:storage});
 //const upload=multer({dest:"upload/"});//파일 이름을 임의로 생성
-
+//multer : 요청이 올때 파라미터가 blob 으로 오면 이때 file 로 된 blob 은 바로 저장, 쿼리스트링으로 추정되는 blob 은 req.body 에 추가
 router.post("/insert.do",upload.single("img_path"),async (req, res)=>{
-    const imgPathFile=req.file;
-    console.log(imgPathFile);
+    //const imgPathFile=req.file;
+    //console.log(imgPathFile);
     const reply=req.body;//post 방식으로 보내는 파라미터
-    res.send(reply);
+    if(!req.body.parent_br_id){ //"" or undefined
+        req.body.parent_br_id=null;
+    }
+    req.body.b_id=Number(req.body.b_id);
+    let insertId=0;
+    try {
+        insertId=await boardRepliesService.register(reply)
+    }catch (e) {
+        console.error(e);
+    }
+    console.log("등록된 댓글 번호 :"+insertId)
+    res.redirect(`/boards/${reply.b_id}/detail.do`);
+
 });
-
-
 module.exports=router;

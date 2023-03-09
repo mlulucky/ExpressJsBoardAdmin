@@ -1,0 +1,32 @@
+ul.ps-0(style="list-style:none")
+    -for (const r of board.replies)
+        li
+            div.card
+                div.row.g-0
+                    div.col-md-3
+                        img.img-fluid.rounded(src=r.img_path)
+                    div.col-md-9
+                        div.card-body
+                            p.card-text
+                                small.pe-3=`댓글번호 : ${r.br_id}`
+                                small.px-3=`글쓴이 : ${r.u_id}`
+                                small.px-3=`댓글상태 : ${r.status}`
+                            p.card-text.d-flex
+                                small.pe-3.text-muted=`작성일 : ${r.post_time.toLocaleString("ko-KR")}`
+                                small.text-muted=`수정일 : ${r.update_time.toLocaleString("ko-KR")}`
+                            p.card-text=r.content
+                    ul.nav.nav-tabs
+                        li.nav-item
+                            a.nav-link(href=`#replyModify${r.br_id}`, role="button", data-bs-toggle="collapse") 수정
+                        li.nav-item
+                            a.nav-link(href=`#replyReply${r.br_id}`, role="button", data-bs-toggle="collapse") 대댓글작성
+                        li.nav-item
+                            a.nav-link 삭제
+                    div.collapse(id=`replyModify${r.br_id}`)
+                        form
+                            p
+                                textarea=r.content
+                    div.collapse(id=`replyReply${r.br_id}`)
+                        include replyInsert
+                div
+                    include replylist

@@ -85,7 +85,6 @@ describe("BoardRepliesDao test",()=>{
             console.error(e);
         }
         expect(del).toBeGreaterThan(0);
-
     })
 });
 // 플젝!! 팀원 내일짜서 16일 17일

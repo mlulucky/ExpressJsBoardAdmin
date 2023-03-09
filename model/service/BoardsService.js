@@ -2,9 +2,11 @@ const pool=require("../db/WebAppBoardPool");
 const BoardsDao = require("../dao/BoardsDao");
 const BoardImsDao = require("../dao/BoardImgsDao");
 const BoardLikesDao=require("../dao/BoardLikesDao");
+const BoardRepliesDao=require("../dao/BoardRepliesDao")
 const boardImsDao = new BoardImsDao(pool);
 const boardLikesDao=new BoardLikesDao(pool);
 const boardsDao=new BoardsDao(pool);
+const boardRepliesDao=new BoardRepliesDao(pool);
 //서버튜닝 : 기능개선없이 성능을 올리는 것
 
 class BoardsService{
@@ -20,13 +22,15 @@ class BoardsService{
     }
     async detail(bId){
         const board=await boardsDao.findById(bId);
-        const imgs=await boardImsDao.findByBId(bId);
         const bls=await boardLikesDao.groupByStatusFindByBid(bId);
+        const imgs=await boardImsDao.findByBId(bId);
+        const replies=await boardRepliesDao.findByBid(bId);
         board.imgs=imgs;
         board.bls=bls;
+        board.replies=replies;
         //boards : board_imgs = 1 : N
         //boards : board_likes = 1 : N
-        //board_likes 의 그룹핑된 수 2시까지 식사하세요~
+        //boards : board_replies = 1 :N
         return board;
     }
     async modify(board){

@@ -61,18 +61,17 @@ app.use(function (req, res, next){
   next();
 });
 // 미들웨어를 이용해서 로그인 인증 구현 !
-// app.use( function (req, res, next ){
-//   if(req.path==="/" || req.path==="/users/login.do" ){
-//     next();
-//   }else{
-//     if(req.session.loginUser){
-//       next();
-//     }else{
-//       res.redirect("/users/login.do");
-//     }
-//   }
-// });
-
+app.use( function (req, res, next ){
+  if(req.path==="/" || req.path==="/users/login.do" ){
+    next();
+  }else{
+    if(req.session.loginUser){
+      next();
+    }else{
+      res.redirect("/users/login.do");
+    }
+  }
+});
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/boards',boardsRouter);

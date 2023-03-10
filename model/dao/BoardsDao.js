@@ -1,26 +1,9 @@
 //const pool=require("../db/WebAppBoardPool");
 class BoardsDao{
-    #findAllSql="SELECT * FROM boards LIMIT ?,?";
-    #countAllSql="SELECT COUNT(*) FROM boards";
-    #findByStatusSql= "SELECT * FROM boards WHERE status=? LIMIT ?,?";
-    #countByStatusSql="SELECT COUNT(*) FROM boards WHERE status=?";
+    #findBySearchSql="SELECT * FROM boards";
+    #countBySearchSql="SELECT COUNT(*) FROM boards";
+
     #findByIdSql="SELECT * FROM boards WHERE b_id=?";
-    // findByIdSql=
-    //     `SELECT *,
-    //        (SELECT COUNT(*)
-    //             FROM board_likes l
-    //             WHERE l.b_id=b.b_id AND status='LIKE') likes,
-    //        (SELECT COUNT(*)
-    //             FROM board_likes l
-    //             WHERE l.b_id=b.b_id AND status='BAD') bads,
-    //        (SELECT COUNT(*)
-    //             FROM board_likes l
-    //             WHERE l.b_id=b.b_id AND status='SAD') sads,
-    //        (SELECT COUNT(*)
-    //             FROM board_likes l
-    //             WHERE l.b_id=b.b_id AND status='BEST') bests
-    //         FROM boards b WHERE b_id=?`,
-    //findByIdSql: "SELECT * FROM boards LEFT JOIN board_imgs USING(b_id) WHERE b_id=?";
     #findByUidSql= "SELECT * FROM boards WHERE u_id=?";
 
     #updateSql= "UPDATE boards SET title=?, content=?, status=? WHERE b_id=?";
@@ -30,19 +13,27 @@ class BoardsDao{
     constructor(pool) {
         this.#pool=pool;
     }
-    async findAll (pageVo){
-        const[rows,f]=await this.#pool.query(this.#findAllSql,[ pageVo.offset, pageVo.rowLength] );
-        return rows;
-    };
-    async countAll(){
-        let count=0;
-        const [rows,f]=await this.#pool.query(this.#countAllSql);
-        // rows=[ COUNT(*)]
-        //          16
-        count=rows[0]["COUNT(*)"];
-        return count;
-    }
+    async findBySearch(pageVo){
+        //검색이 있다면 pageVo.searchField  pageVo.searchValue 이 null 이 아님
+        let searchQuery=this.#findBySearchSql;//"SELECT * FROM boards"
+        if(pageVo.searchField && pageVo.searchValue){
+            searchQuery+=` WHERE ${pageVo.searchField} LIKE '%${pageVo.searchValue}%'`
+        }
+        searchQuery+=" ORDER BY "+(pageVo.orderField || "post_time");
+        searchQuery+=" "+(pageVo.orderDirect || "DESC");
 
+        searchQuery+=" LIMIT ?,?";
+        const [rows,f]=await this.#pool.query(searchQuery,[pageVo.offset,pageVo.rowLength])
+        return rows;
+    }
+    async countBySearch(searchField, searchValue){
+        let sql=this.#countBySearchSql;
+        if(searchField && searchValue){
+            sql+=` WHERE ${searchField} LIKE '%${searchValue}%'`;
+        }
+        const [rows, f]=await this.#pool.query(sql);
+        return rows[0]["COUNT(*)"];
+    }
 
     async  findById (bId){
         const [rows,f]=await this.#pool.query(this.#findByIdSql,[bId]);
@@ -54,17 +45,6 @@ class BoardsDao{
         return rows[0] || null;
     };
 
-    async findByStatus (status,pageVo) {
-      const values=[status, pageVo.offset, pageVo.rowLength]
-      const [rows,f]= await this.#pool.query(this.#findByStatusSql,values);
-      return rows;
-    };
-    async countByStatus(status){
-        let count=0;
-        const [rows,f]=await  this.#pool.query(this.#countByStatusSql,[status]);
-        count=rows[0]["COUNT(*)"];
-        return count;
-    }
     async updateById (board) {
         let update=0;
         const values=[

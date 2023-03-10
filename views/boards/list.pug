@@ -51,15 +51,23 @@ block content
                     td.text-right
                         a.btn.btn-outline-primary.btn-sm(href=`/boards/${board.b_id}/detail.do`) 상세
 
+    div=boards.pageVo.isPrev
     nav.mt-4.d-flex.justify-content-center
         ul.pagination
-            li.page-item(class=(page===1) && "active")
-                a.page-link(href=`?${query}page=1`) 1
-            li.page-item(class=(page===2) && "active")
-                a.page-link(href=`?${query}page=2`) 2
-            li.page-item(class=(page===3) && "active")
-                a.page-link(href=`?${query}page=3`) 3
-            li.page-item(class=(page===4) && "active")
-                a.page-link(href=`?${query}page=4`) 4
-            li.page-item(class=(page===5) && "active")
-                a.page-link(href=`?${query}page=5`) 5
+            li.page-item(class=(!boards.pageVo.isPrev) && "disabled")
+                a.page-link(href=`?page=1`) first
+
+            li.page-item(class=(!boards.pageVo.isPrev) && "disabled")
+                a.page-link(href=`?page=${boards.pageVo.prev}`) prev
+
+            -for(let p=1; p <= boards.pageVo.totalPage; p++)
+                li.page-item(class=(p===boards.pageVo.page) && "active")
+                    a.page-link(href=`?page=${p}`)=p
+
+            li.page-item(class=(!boards.pageVo.isNext) && "disabled")
+                a.page-link(href=`?page=${boards.pageVo.next}`) next
+
+            li.page-item(class=(!boards.pageVo.isNext) && "disabled")
+                a.page-link(href=`?page=${boards.pageVo.totalPage}`) last
+
+            //쉬었다가 오세요~ 11시 7분까지

@@ -6,4 +6,13 @@ describe("model.dao.BoardDao test",()=>{
        const board=await boardsDao.findById(6);
         console.log(board);
     });
+    test("countAll",async ()=>{
+        let cnt=await boardsDao.countAll();
+        console.log(cnt)
+    });
+    test("countByStatus",async ()=>{
+        let cnt=await boardsDao.countByStatus("PUBLIC");
+        console.log(cnt)
+    });
+
 })

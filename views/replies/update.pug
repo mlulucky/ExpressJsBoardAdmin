@@ -1,11 +1,12 @@
-form#replyResgister.p-4.border.collapse(method="post", action="/replies/insert.do",enctype="multipart/form-data")
+form.p-4.border(method="post", action="/replies/insert.do",enctype="multipart/form-data")
     p.text-end.h4 댓글 수정 폼
     div.row
         div.form-floating.col
-            input.form-control(name="b_id",value=board.b_id,readonly=true)
-            label 글번호
+            input(name="b_id",value=board.b_id,hidden=true)
+            input.form-control(name="br_id",value=r.br_id,readonly=true)
+            label 댓글 번호
         div.form-floating.col
-            input.form-control(name="u_id",value=loginUser.u_id,readonly=true)
+            input.form-control(name="u_id",value=r.u_id,readonly=true)
             label 댓글 작성자
         div.form-floating.col
             select.form-control.w-100(name="status")
@@ -15,11 +16,11 @@ form#replyResgister.p-4.border.collapse(method="post", action="/replies/insert.d
                 //option(value="BLOCK") 차단
             label 댓글 상태
     div.my-2.input-group
-        label.input-group-text 이미지
+        label.input-group-text 새 이미지
         input.form-control(type="file",name="img_path")
 
     div.form-floating
-        textarea.form-control(name="content")
+        textarea.form-control(name="content")=r.content
         label 내용
     div.mt-2.text-end
         button.btn.btn-outline-warning.me-2(type="reset") 초기화

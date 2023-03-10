@@ -23,10 +23,8 @@ ul.ps-0(style="list-style:none")
                         li.nav-item
                             a.nav-link 삭제
                     div.collapse(id=`replyModify${r.br_id}`)
-                        form
-                            p
-                                textarea=r.content
+                        include update
                     div.collapse(id=`replyReply${r.br_id}`)
                         include replyInsert
                 div
-                    include replylist
+                    include replies/list

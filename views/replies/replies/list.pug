@@ -23,9 +23,6 @@ ul(style="list-style:none")
                         li.nav-item
                             a.nav-link 삭제
                     div.collapse(id=`replyModify${rr.br_id}`)
-                        form
-                            p
-                                textarea=rr.content
+                        include update
                     div.collapse(id=`replyReply${rr.br_id}`)
-                        //include replyReplyInsert
-//4시 15분까지 쉬고~ 나머지 자습입니다~ 대대댓글 해보세요~
+                        include insert

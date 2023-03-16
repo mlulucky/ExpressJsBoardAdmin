@@ -9,8 +9,12 @@
 class BoardRepliesDao{
     #findAllSql="SELECT * FROM board_replies ORDER BY post_time DESC LIMIT ?,?";
     #findByStatusSql="SELECT * FROM board_replies WHERE status=? ORDER BY post_time DESC LIMIT ?,?"; //PRIVATE(y),PUBLIC,REPORT(r),BLOCK(b)
-    #findByBidSql="SELECT * FROM board_replies WHERE b_id=? AND parent_br_id IS NULL ORDER BY post_time DESC LIMIT ?,?"; //보드에 작성된 댓글(유저에게는 status="PUBLIC",로그인한 유저는 PRIVATE 까지 보여야함)
 
+    #findBySearchSql="SELECT * FROM board_replies";
+    #countBySearchSql="SELECT COUNT(*) FROM board_replies";
+
+
+    #findByBidSql="SELECT * FROM board_replies WHERE b_id=? AND parent_br_id IS NULL ORDER BY post_time DESC LIMIT ?,?"; //보드에 작성된 댓글(유저에게는 status="PUBLIC",로그인한 유저는 PRIVATE 까지 보여야함)
     #findByParentBrIdSql="SELECT * FROM board_replies WHERE parent_br_id=? ORDER BY post_time";
     //댓글 달린 댓글 리스트 조회!
     #insertOneSql="INSERT INTO board_replies (b_id, u_id, parent_br_id, img_path, content, status) VALUE (?,?,?,?,?,?)";
@@ -22,6 +26,26 @@ class BoardRepliesDao{
     constructor(pool) {
         this.#pool=pool;
     }
+    async findBySearch(pageVo){
+        let searchQuery=this.#findBySearchSql;
+        if(pageVo.searchField && pageVo.searchValue){
+            searchQuery+=` WHERE ${pageVo.searchField} LIKE '%${pageVo.searchValue}%'`
+        }
+        searchQuery+=` ORDER BY ${(pageVo.orderField || "post_time")}`;
+        searchQuery+=` ${(pageVo.orderDirect || "DESC")}`;
+        searchQuery+=` LIMIT ?,?`;
+        const [rows,f]=await this.#pool.query(searchQuery,[pageVo.offset,pageVo.rowLength]);
+        return rows;
+    }
+    async countBySearch(searchField, searchValue){
+        let sql=this.#countBySearchSql;
+        if(searchField && searchValue) {
+            sql+=` WHERE ${searchField} LIKE '%${searchValue}'`;
+        }
+        const [rows, f]=await this.#pool.query(sql);
+        return rows[0]["COUNT*(*)"];
+    }
+
     async findByAll(page=1){
         const [rows,f]=await this.#pool.query(this.#findAllSql,[(page-1)*this.#pageLength,this.#pageLength]);
         return rows;

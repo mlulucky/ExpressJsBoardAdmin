@@ -46,34 +46,22 @@ block content
         thead
             tr
                 th 게시글 번호
-                //th 비밀번호
                 th 아이디
-                //th 전화번호
-                //th 이메일
                 th 작성시간
                 th 최종수정시간
                 th 상태
                 th 제목
-                //th 상세주소
-                //th 내용
                 th 조회수
-                // 좋아요 수 🧨 테이블 어떻게 합칠지 생각..
-                // 댓글 수  🧨
                 th.text-right 동작
         tbody
             each board in boards
                 tr
                     td #{board.b_id}
-                    //td #{user.pw}
                     td #{board.u_id}
-                    //td #{user.phone}
-                    //td #{user.email}
                     td #{board.post_time ? board.post_time.toLocaleDateString("ko") : ""}
                     td #{board.update_time ? board.update_time.toLocaleDateString("ko") : ""}
                     td #{board.status}
                     td #{board.title}
-                    //td #{user.detail_address}
-                    //td #{board.content}
                     td #{board.view_count}
                     td.text-right
                         a.btn.btn-outline-primary.btn-sm(href=`/boards/${board.b_id}/detail.do`) 상세

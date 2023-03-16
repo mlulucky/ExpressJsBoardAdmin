@@ -7,7 +7,7 @@ router.get('/list.do', async (req,res)=>{
     let page = parseInt(req.query.page) || 1; // 페이지 있으면 페이지, 없으면 1
 
     // 쿼리에 페이지 파라미터 처리(페이지 파라미터 제외)
-    let query='';
+    // let query='';
     //파라미터 쿼리스트링 : ?status=PUBLIC&order=b_id&page=4
     //req.query={status:"PUBLIC",order:"b_id",page:"4"}
     //query="status=PUBLIC&order=b_id&" + page=?

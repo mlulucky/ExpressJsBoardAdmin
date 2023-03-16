@@ -1,62 +1,71 @@
 extends ../layout
 block content
     h2.my-4 유저 리스트
-
+    // 리스트 정렬을 위한 폼태그 & 셀렉박스
+    form.mx-auto.my-4(method="GET", action="/users/list.do", style="width:550px")
+        div.input-group
+            label.input-group-text 검색
+            select.form-select(name="orderDirect")
+                option(value="") 순서
+                option(value="DESC", selected=(params.orderDirect==="DESC")) 내림차순
+                option(value="ASC", selected=(params.orderDirect==="ASC")) 오름차순
+            select.form-select(name="orderField")
+                option(value="") 정렬
+                option(value="u_id", selected=(params.orderField==="u_id")) 아이디
+                option(value="name", selected=(params.orderField==="name")) 이름
+                option(value="post_time", selected=(params.orderField==="post_time")) 가입일
+                option(value="birth", selected=(params.orderField==="birth")) 생년월일
+                option(value="gender", selected=(params.orderField==="gender")) 성별
+                option(value="address", selected=(params.orderField==="address")) 주소
+                option(value="permission", selected=(params.orderField==="permission")) 권한
+            select.form-select(name="field")
+                option(value="") 선택
+                option(value="u_id", selected=(params.field==="u_id")) 아이디
+                option(value="name", selected=(params.field==="name")) 이름
+                option(value="post_time", selected=(params.field==="post_time")) 가입일
+                option(value="birth", selected=(params.field==="birth")) 생년월일
+                option(value="gender", selected=(params.field==="gender")) 성별
+                option(value="address", selected=(params.field==="address")) 주소
+                option(value="permission", selected=(params.field==="permission")) 권한
+            input.form-control(name="value", value=(params.value))
+            button.btn.btn-outline-info 제출
     ul.nav.nav-tabs.justify-content-end
         li.nav-item
-            a.nav-link(href="/users/list.do" class=(params.permission === undefined ? 'active' : '')) 전체
+            a.nav-link(href="/users/list.do" class=((!params.field&&!params.value) ? 'active' : '')) 전체
         li.nav-item
-            a.nav-link(href="/users/list.do?permission=USER" class=(params.permission === 'USER' ? 'active' : '')) 일반
+            a.nav-link(href="/users/list.do?field=permission&value=USER" class=((params.field === 'permission' &&params.value==='USERT') ? 'active' : '')) 일반
         li.nav-item
-            a.nav-link(href="/users/list.do?permission=SILVER" class=(params.permission === 'SILVER' ? 'active' : '')) 실버
+            a.nav-link(href="/users/list.do?field=permission&value=SILVER" class=((params.field === 'permission' &&params.value==='SILVER') ? 'active' : '')) 실버
         li.nav-item
-            a.nav-link(href="/users/list.do?permission=GOLD" class=(params.permission === 'GOLD' ? 'active' : '')) 골드
+            a.nav-link(href="/users/list.do?field=permission&value=GOLD" class=((params.field ==='permission' &&params.value === 'GOLD') ? 'active' : '')) 골드
         li.nav-item
-            a.nav-link(href="/users/list.do?permission=PRIVATE" class=(params.permission === 'PRIVATE' ? 'active' : '')) 비공개
+            a.nav-link(href="/users/list.do?field=permission&value=PRIVATE" class=((params.field === 'permission' && params.value === 'PRIVATE') ? 'active' : '')) 비공개
         li.nav-item
-            a.nav-link(href="/users/list.do?permission=ADMIN" class=(params.permission === 'ADMIN' ? 'active' : '')) 관리자
+            a.nav-link(href="/users/list.do?field=permission&value=ADMIN" class=((params.field === 'permission' && params.value === 'ADMIN') ? 'active' : '')) 관리자
 
     table#userTable.table.table-striped.table-hover
         thead
             tr
                 th 아이디
-                //th 비밀번호
                 th 이름
-                //th 전화번호
-                //th 이메일
                 th 가입일
                 th 생년월일
                 th 성별
                 th 주소
-                //th 상세주소
                 th 권한
                 th.text-right 동작
         tbody
             each user in users
                 tr
                     td #{user.u_id}
-                    //td #{user.pw}
                     td #{user.name}
-                    //td #{user.phone}
-                    //td #{user.email}
                     td #{ user.post_time ? user.post_time.toLocaleDateString("ko") : ""}
                     td #{ user.birth ? user.birth.toLocaleDateString("ko") : ""}
                     td #{user.gender}
                     td #{user.address}
-                    //td #{user.detail_address}
                     td #{user.permission}
                     td.text-right
                         a.btn.btn-outline-primary.btn-sm(href=`/users/${user.u_id}/detail.do`) 상세
+    -const pageVo=users.pageVo;
+    include ../pagination.pug
 
-    nav.mt-4.d-flex.justify-content-center
-        ul.pagination
-            li.page-item(class=(page===1) && "active")
-                a.page-link(href=`?${query}page=1`) 1
-            li.page-item(class=(page===2) && "active")
-                a.page-link(href=`?${query}page=2`) 2
-            li.page-item(class=(page===3) && "active")
-                a.page-link(href=`?${query}page=3`) 3
-            li.page-item(class=(page===4) && "active")
-                a.page-link(href=`?${query}page=4`) 4
-            li.page-item(class=(page===5) && "active")
-                a.page-link(href=`?${query}page=5`) 5

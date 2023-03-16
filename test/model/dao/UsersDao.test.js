@@ -37,6 +37,7 @@ toHaveBeenCalled(), toHaveBeenCalledWith(): 함수가 호출되었는지, 특정
 */
 const pool=require("../../../model/db/WebAppBoardPool");
 const UsersDao=require("../../../model/dao/UsersDao");
+const PageVo=require("../../../model/vo/PageVo");
 const usersDao=new UsersDao(pool);
 
 describe("model.dao.UsersDao Test 진행",()=>{
@@ -101,6 +102,11 @@ describe("model.dao.UsersDao Test 진행",()=>{
         expect(insert).toBe(1) && expect(del).toBe(1);
         //insert 가 1이 아니면 test 실패가 발생
     });
+    test("findBySearch", async()=>{
+        const pageVo=new PageVo(1,10,{field:"gender",value:"male"});
+        const users=await usersDao.findBySearch(pageVo);
+        console.log(users);
+    });
 
     test("findById",async ()=>{
         let user=await usersDao.findById("test01");
@@ -142,5 +148,6 @@ describe("model.dao.UsersDao Test 진행",()=>{
         //수정한 내역과 조회한 내역이 같은지?
         expect(update).toBe(1) && expect(user).toEqual(resultUser);
     });
+
 
 });

@@ -22,7 +22,7 @@ class BoardsDao{
         searchQuery+=" ORDER BY "+(pageVo.orderField || "post_time");
         searchQuery+=" "+(pageVo.orderDirect || "DESC");
 
-        searchQuery+=" LIMIT ?,?";
+        searchQuery+=" LIMIT ?,?"; // LIMIT ?,? 물음표에 들어갈 값 pageVo.offset(시작 row 번호), pageVo.rowLength(한페이지 전체 row 개수)
         const [rows,f]=await this.#pool.query(searchQuery,[pageVo.offset,pageVo.rowLength])
         return rows;
     }
